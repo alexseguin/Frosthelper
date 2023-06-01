@@ -1,0 +1,7 @@
+<button (click)="toggle()" class="text-blue-600 hover:text-blue-400 text-lg">
+    <app-chevron-down *ngIf="!open else up"></app-chevron-down>
+    <ng-template #up>
+      <app-chevron-up></app-chevron-up>
+    </ng-template>
+  </button>
+  
