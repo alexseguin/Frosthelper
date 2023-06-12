@@ -5,6 +5,7 @@ import { ChevronUpComponent } from './chevron-up/chevron-up.component';
 import { SadFaceComponent } from './sad-face/sad-face.component';
 import { HappyFaceComponent } from './happy-face/happy-face.component';
 import { CogComponent } from './cog/cog.component';
+import { MinusComponent } from './minus/minus.component';
 
 
 
@@ -21,7 +22,8 @@ import { CogComponent } from './cog/cog.component';
     ChevronUpComponent,
     SadFaceComponent,
     HappyFaceComponent,
-    CogComponent
+    CogComponent,
+    MinusComponent
   ],
   imports: [
     CommonModule

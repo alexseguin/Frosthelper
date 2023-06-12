@@ -1,7 +1,10 @@
 import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { ModifierCard } from 'src/app/types/cards';
 
-export const BACK_IMAGE = '/assets/mod-deck-back.png';
+export const DEFAULT_CARD: ModifierCard =  {
+  image: '/assets/mod-deck-back.png',
+  triggers: []
+}
 
 export const DEFAULT_DECK = new InjectionToken<ModifierCard[]>('Default Modifier Deck');
 export const CURSE = new InjectionToken<ModifierCard>('Curse Card');
@@ -72,5 +75,12 @@ export class ModifierDeckService {
 
   reset() {
     this.deck = this.DEFAULT_DECK;
+  }
+
+  stateDebug() {
+    return JSON.stringify({
+      deck: this.deck,
+      discard: this.discard,
+    })
   }
 }
