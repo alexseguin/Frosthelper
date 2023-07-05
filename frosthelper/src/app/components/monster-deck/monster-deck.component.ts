@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { DEFAULT_CARD, ModifierDeckService } from 'src/app/services/modifier-deck/modifier-deck.service';
-import { ModifierCard } from 'src/app/types/cards';
+
+
+type DrawMode = 'normal' | 'advantage' | 'disadvantage';
 
 @Component({
   selector: 'app-monster-deck',
@@ -9,13 +11,37 @@ import { ModifierCard } from 'src/app/types/cards';
 })
 export class MonsterDeckComponent {
 
-  currentCard = DEFAULT_CARD;
+  drawMode: DrawMode = 'normal';
+
+  currentCards = [DEFAULT_CARD];
 
   constructor(public monster: ModifierDeckService) { }
 
 
   draw(): void {
-    this.currentCard = this.monster.draw();
-    console.log(this.monster.stateDebug());
+    
+    // switch on draw mode
+    switch(this.drawMode) {
+      case 'normal':
+        this.currentCards = [this.monster.draw()]
+        break;
+      case 'advantage':
+        this.currentCards = [this.monster.draw(), this.monster.draw()];
+        break;
+      case 'disadvantage':
+        this.currentCards = [this.monster.draw(), this.monster.draw()];
+        break;
+    }
+
+    this.drawMode = 'normal';
   }
+
+  advantage(): void {
+    this.drawMode = 'advantage';
+  }
+
+  disadvantage(): void {
+    this.drawMode = 'disadvantage';
+  }
+
 }

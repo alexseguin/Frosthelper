@@ -1,18 +1,36 @@
-<div class="relative">
+<div class="relative z-50">
   <!-- Toggle button -->
-    <app-chevron-toggle [open]="open" (toggled)="toggled($event)"></app-chevron-toggle>
+  <app-chevron-toggle
+    [open]="open"
+    (toggled)="toggled($event)"
+  ></app-chevron-toggle>
 
-    <!-- Magical dropdown  -->
+  <!-- Magical dropdown  -->
   <div *ngIf="open" class="absolute right-1 w-64">
-    <div class="bg-white rounded-lg shadow-xl p-4 flex flex-col gap-y-2">
-        <a (click)="open = false" class="tw-link w-full" [routerLink]="['/ally-deck']">
-            Ally Deck
-        </a>
-        <hr>
-        <a (click)="open = false" class="tw-link w-full" [routerLink]="['/monster-deck']">
-            Monster Deck
-        </a>
+    <!-- Bounding box -->
+    <div
+      (mouseenter)="mouseEntersDropdown()"
+      (mouseout)="mouseLeavesDropdown()"
+      class="absolute w-full h-full z-40"
+    ></div>
 
+    <!-- Dropdown contents -->
+    <div class="bg-white rounded-lg shadow-xl p-4 flex flex-col gap-y-2">
+      <a
+        (click)="open = false"
+        class="tw-link w-full"
+        [routerLink]="['/ally-deck']"
+      >
+        Ally Deck
+      </a>
+      <hr />
+      <a
+        (click)="open = false"
+        class="tw-link w-full"
+        [routerLink]="['/monster-deck']"
+      >
+        Monster Deck
+      </a>
     </div>
   </div>
 </div>

@@ -1,32 +1,57 @@
 <div class="w-full h-full flex items-center justify-center">
   <div class="bg-white p-4 flex flex-col gap-y-4 rounded">
     <div class="flex justify-between">
-        <h1 class="text-2xl">Monster Modifier Deck</h1>
-        <div>
-            <button class="text-gray-500 hover:text-gray-400">
-                <app-cog></app-cog>
-            </button>
-        </div>
-    </div>
-    <img [src]="currentCard.image" />
-    <div class="flex justify-between w-full">
-        
-        <!-- Advantage / Disadvantage  -->
-        <div class="flex gap-x-2">
-            <button class="text-green-600 hover:text-green-400">
-                <app-happy-face></app-happy-face>
-            </button>
-            <button  class="text-yellow-600 hover:text-yellow-400">
-                <app-sad-face></app-sad-face>
-            </button>
-        </div>
+      <h1 class="text-2xl">Monster Modifier Deck</h1>
 
-        <!-- Draw -->
-        <div>
-            <button (click)="draw()" class="bg-blue-200 px-4 py-2 rounded">
-                Draw
-            </button>
-        </div>
+      <!-- Top actions -->
+      <div class="flex gap-x-3">
+        <!-- View discard -->
+        <button class="text-gray-500 hover:text-gray-400">
+          <app-archive-x></app-archive-x>
+        </button>
+
+        <!-- Deck settings -->
+        <button class="text-gray-500 hover:text-gray-400">
+          <app-cog></app-cog>
+        </button>
+      </div>
+    </div>
+
+    <!-- Card image -->
+    <div style="max-height: 36rem" class="overflow-y-auto">
+      <ng-container *ngFor="let currentCard of currentCards">
+        <img class="object-scale-down h-64" [src]="currentCard.image" />
+      </ng-container>
+    </div>
+
+    <!-- Bottom actions -->
+    <div class="flex justify-between w-full">
+      <div class="flex gap-x-2">
+        <!-- Advantage -->
+        <button
+          (click)="advantage()"
+          [ngClass]="{ 'bg-green-100': drawMode === 'advantage' }"
+          class="text-green-600 hover:text-green-400"
+        >
+          <app-happy-face></app-happy-face>
+        </button>
+        
+        <!-- Disadvantage  -->
+        <button
+          (click)="disadvantage()"
+          [ngClass]="{ 'bg-yellow-100': drawMode === 'disadvantage' }"
+          class="text-yellow-600 hover:text-yellow-400"
+        >
+          <app-sad-face></app-sad-face>
+        </button>
+      </div>
+
+      <!-- Draw -->
+      <div>
+        <button (click)="draw()" class="bg-blue-200 px-4 py-2 rounded">
+          Draw
+        </button>
+      </div>
     </div>
   </div>
 </div>
