@@ -1,0 +1,13 @@
+<mat-dialog-content class="bg-white">
+  <div *ngIf="discard.length > 0 else empty" style="max-height: 36rem" class="overflow-y-auto flex flex-col gap-3">
+    <ng-container *ngFor="let card of discard">
+      <img class="object-scale-down h-32" [src]="card.image" />
+    </ng-container>
+  </div>
+  <ng-template #empty>
+    <div class="flex flex-col items-center justify-center gap-3 text-gray-800">
+      <app-archive-x></app-archive-x>
+      <p >No cards in discard</p>
+    </div>
+  </ng-template>
+</mat-dialog-content>

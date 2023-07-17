@@ -13,11 +13,20 @@ import {
   M_CURSE,
 } from './monster-modifier-deck';
 import { IconsModule } from 'src/app/icons/icons.module';
+import { ModifierDiscardDialogModule } from '../common/modifier-discard-dialog/modifier-discard-dialog.module';
+import { ModifierSettingsDialogModule } from '../common/modifier-settings-dialog/modifier-settings-dialog.module';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   exports: [MonsterDeckComponent],
   declarations: [MonsterDeckComponent],
-  imports: [CommonModule, IconsModule],
+  imports: [
+    CommonModule,
+    IconsModule,
+    NoopAnimationsModule,
+    ModifierDiscardDialogModule,
+    ModifierSettingsDialogModule,
+  ],
   providers: [
     ModifierDeckService,
     { provide: CURSE, useValue: M_CURSE },

@@ -1,76 +1,189 @@
 import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { ModifierCard } from 'src/app/types/cards';
 
-export const DEFAULT_CARD: ModifierCard =  {
+export const DEFAULT_CARD: ModifierCard = {
   image: '/assets/mod-deck-back.png',
-  triggers: []
-}
+  triggers: [],
+};
+export type DrawMode = 'normal' | 'advantage' | 'disadvantage';
 
-export const DEFAULT_DECK = new InjectionToken<ModifierCard[]>('Default Modifier Deck');
+export const DEFAULT_DECK = new InjectionToken<ModifierCard[]>(
+  'Default Modifier Deck'
+);
 export const CURSE = new InjectionToken<ModifierCard>('Curse Card');
 export const BLESS = new InjectionToken<ModifierCard>('Bless Card');
 
 @Injectable()
 export class ModifierDeckService {
-
   // Initialized from injection context
   private DEFAULT_DECK: ModifierCard[];
   private CURSE: ModifierCard;
   private BLESS: ModifierCard;
 
-  public deck: ModifierCard[];
+  // Draw state
+  private drawMode: DrawMode = 'normal';
+  private currentCards = [DEFAULT_CARD];
+
+  // Deck state
+  private deck: ModifierCard[];
   private discard: ModifierCard[] = [];
+  private blessings = 0;
+  private curses = 0;
 
   constructor(
-    @Inject(DEFAULT_DECK) DEFAULT: ModifierCard[], 
+    @Inject(DEFAULT_DECK) DEFAULT: ModifierCard[],
     @Inject(CURSE) CURSE: ModifierCard,
-    @Inject(BLESS) BLESS: ModifierCard,
+    @Inject(BLESS) BLESS: ModifierCard
   ) {
-    this.deck = this.DEFAULT_DECK = DEFAULT;
+    this.DEFAULT_DECK = DEFAULT;
+    this.deck = [...this.DEFAULT_DECK];
     this.CURSE = CURSE;
     this.BLESS = BLESS;
 
     this.shuffle();
   }
 
-  public draw(): ModifierCard {
-    const drawnCard = this.deck.pop();
+  private drawCardFromDeck(): ModifierCard {
+    const card = this.deck.pop();
 
-    if (!drawnCard) {
+    if (!card) {
       this.shuffle();
-      this.draw();
+      return this.drawCardFromDeck();
     }
 
-    if (!drawnCard) {
+    if (!card) {
       throw new Error('Hell froze over');
     }
 
-    if (!drawnCard.triggers.includes('remove')) {
-      this.discard.push(drawnCard);
+    if (!card.triggers.includes('remove')) {
+      this.discard.push(card);
     }
 
-    // If special card, trigger special effect
-    if (drawnCard.triggers.includes('reshuffle')) {
+    return card;
+  }
+
+  public draw(): void {
+    this.currentCards = [DEFAULT_CARD];
+
+    let cardsDrawn: ModifierCard[];
+
+    // switch on draw mode
+    switch (this.drawMode) {
+      case 'normal':
+        cardsDrawn = [this.drawCardFromDeck()];
+        break;
+      case 'advantage':
+        cardsDrawn = [this.drawCardFromDeck()];
+        cardsDrawn.push(this.drawCardFromDeck());
+        break;
+      case 'disadvantage':
+        cardsDrawn = [this.drawCardFromDeck()];
+        cardsDrawn.push(this.drawCardFromDeck());
+        break;
+    }
+
+    // Check for reshuffle at the end
+    if (cardsDrawn.some((card) => card.triggers.includes('reshuffle'))) {
       this.shuffle();
     }
 
-    return drawnCard;
+    this.drawMode = 'normal';
+    this.currentCards = [...cardsDrawn];
   }
 
-  private shuffle(addDiscard = true) {
-    const discard: ModifierCard[] =  !addDiscard  ? [...this.discard] : [];
-    const shuffledDeck = [...this.deck, ...discard].sort(() => Math.random() - 0.5);
-    this.deck = shuffledDeck;
+  private shuffle(addDiscardBackIntoDeck = true) {
+    let discard: ModifierCard[] = [];
+    if (addDiscardBackIntoDeck) {
+      // Set the discard aside to add it back to the deck, then clear it
+      discard = [...this.discard];
+      this.discard = [];
+    }
+    const shuffledDeck = [...this.deck, ...discard].sort(
+      () => Math.random() - 0.5
+    );
+    this.deck = [...shuffledDeck];
   }
 
   public addCurse() {
     this.deck.push(this.CURSE);
+    this.curses++;
     this.shuffle(false);
   }
 
   public addBless() {
     this.deck.push(this.BLESS);
+    this.blessings++;
     this.shuffle(false);
+  }
+
+  public removeCurse() {
+    if (this.numberOfCurses === 0) {
+      return;
+    }
+
+    const index = this.deck.findIndex(
+      (card) => card.image === this.CURSE.image
+    );
+    if (index > -1) {
+      this.deck.splice(index, 1);
+      this.curses--;
+      this.shuffle(false);
+    }
+  }
+
+  public removeBless() {
+    if (this.numberOfBlessings === 0) {
+      return;
+    }
+
+    const index = this.deck.findIndex(
+      (card) => card.image === this.BLESS.image
+    );
+    if (index > -1) {
+      this.deck.splice(index, 1);
+      this.blessings--;
+      this.shuffle(false);
+    }
+  }
+
+  public toggleAdvantage() {
+    if (this.drawMode === 'advantage') {
+      this.drawMode = 'normal';
+    } else {
+      this.drawMode = 'advantage';
+    }
+  }
+
+  public toggleDisadvantage() {
+    if (this.drawMode === 'disadvantage') {
+      this.drawMode = 'normal';
+    } else {
+      this.drawMode = 'disadvantage';
+    }
+  }
+
+  get cards(): ModifierCard[] {
+    return this.currentCards;
+  }
+
+  get discarded(): ModifierCard[] {
+    return this.discard;
+  }
+
+  get currentDrawMode(): DrawMode {
+    return this.drawMode;
+  }
+
+  get numberOfBlessings(): number {
+    return this.blessings;
+  }
+
+  get numberOfCurses(): number {
+    return this.curses;
+  }
+
+  get deckSize(): number {
+    return this.deck.length;
   }
 
   reset() {
@@ -81,6 +194,6 @@ export class ModifierDeckService {
     return JSON.stringify({
       deck: this.deck,
       discard: this.discard,
-    })
+    });
   }
 }

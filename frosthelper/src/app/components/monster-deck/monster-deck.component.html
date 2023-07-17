@@ -6,21 +6,21 @@
       <!-- Top actions -->
       <div class="flex gap-x-3">
         <!-- View discard -->
-        <button class="text-gray-500 hover:text-gray-400">
+        <button (click)="viewDiscard()" class="text-gray-500 hover:text-gray-400">
           <app-archive-x></app-archive-x>
         </button>
 
         <!-- Deck settings -->
-        <button class="text-gray-500 hover:text-gray-400">
+        <button (click)="viewSettings()" class="text-gray-500 hover:text-gray-400">
           <app-cog></app-cog>
         </button>
       </div>
     </div>
 
     <!-- Card image -->
-    <div style="max-height: 36rem" class="overflow-y-auto">
+    <div style="max-height: 36rem" class="overflow-y-auto overflow-x-hidden relative">
       <ng-container *ngFor="let currentCard of currentCards">
-        <img class="object-scale-down h-64" [src]="currentCard.image" />
+        <img @cardAnimation class="object-scale-down h-64" [src]="currentCard.image" />
       </ng-container>
     </div>
 
@@ -48,8 +48,9 @@
 
       <!-- Draw -->
       <div>
-        <button (click)="draw()" class="bg-blue-200 px-4 py-2 rounded">
-          Draw
+        <button (click)="draw()" class="bg-blue-200 px-4 py-2 rounded flex flex-col items-center">
+          <span class="text-sm">Draw</span>
+          <span class="text-xs">({{ deckSize }})</span> 
         </button>
       </div>
     </div>

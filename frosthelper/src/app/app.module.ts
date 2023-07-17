@@ -7,6 +7,7 @@ import { AllyDeckModule } from './components/ally-deck/ally-deck.module';
 import { HeaderModule } from './components/header/header.module';
 import { LandingModule } from './components/landing/landing.module';
 import { MonsterDeckModule } from './components/monster-deck/monster-deck.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { MonsterDeckModule } from './components/monster-deck/monster-deck.module
     HeaderModule,
     LandingModule,
     AllyDeckModule,
-    MonsterDeckModule
+    MonsterDeckModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

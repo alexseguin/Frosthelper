@@ -1,0 +1,37 @@
+<mat-dialog-content class="bg-white w-64">
+  <div class="flex flex-col space-between">
+    <div class="flex flex-col text-black py-4">
+      <span
+        >Blessings x <strong>{{ numberOfBessings }}</strong></span
+      >
+      <span
+        >Curses x <strong>{{ numberOfCurses }}</strong></span
+      >
+    </div>
+    <div class="flex flex-col gap-y-4">
+      <hr />
+      <button
+        (click)="addBlessing()"
+        class="text-white bg-green-500 p-2 rounded"
+      >
+        Add Blessing
+      </button>
+      <button (click)="addCurse()" class="text-white bg-red-500 py-2 rounded">
+        Add Curse
+      </button>
+      <hr />
+      <button
+        (click)="removeBlessing()"
+        class="text-gray-500 bg-green-300 p-2 rounded"
+      >
+        Remove Blessing
+      </button>
+      <button
+        (click)="removeCurse()"
+        class="text-gray-500 bg-red-300 p-2 rounded"
+      >
+        Remove Curse
+      </button>
+    </div>
+  </div>
+</mat-dialog-content>
