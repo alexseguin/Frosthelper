@@ -86,6 +86,16 @@ export class ModifierDeckService {
     if (cardsDrawn.some((card) => card.triggers.includes('reshuffle'))) {
       this.shuffle();
     }
+    
+    cardsDrawn.forEach(card => {
+
+      if(card.added && card.triggers.includes('crit')) {
+        this.blessings -= 1;
+      } else if (card.added && card.triggers.includes('miss')) {
+        this.curses -= 1;
+      }
+
+    });
 
     this.drawMode = 'normal';
     this.currentCards = [...cardsDrawn];

@@ -26,8 +26,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
   ],
   providers: [
     ModifierDeckService,
-    { provide: CURSE, useValue: M_CURSE },
-    { provide: BLESS, useValue: M_BLESS },
+    { provide: CURSE, useValue: ({ ...M_CURSE, added: true}) },
+    { provide: BLESS, useValue: ({ ...M_BLESS, added: true })},
     { provide: DEFAULT_DECK, useValue: DEFAULT_ALLY_MODIFIER_DECK },
   ],
 })

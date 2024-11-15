@@ -1,6 +1,7 @@
 export type ModifierCardTriggers = 'reshuffle' | 'remove' | 'miss' | 'crit';
 
 export type ModifierCard = {
-    image: string
-    triggers: ModifierCardTriggers[]
+    image: string,
+    triggers: ModifierCardTriggers[],
+    added?: true
 } 
